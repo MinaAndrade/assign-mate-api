@@ -2,5 +2,5 @@
 
 export interface JwtPayload{
     id: string;
-    //agregar los otros datos que se quieran guardar en el token
+    //adicione os outros dados que você deseja salvar no token
 }

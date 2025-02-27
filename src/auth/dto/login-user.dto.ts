@@ -8,7 +8,7 @@ export class LoginUserDto {
         nullable: false,
         required: true,
         type: "string",
-        example: "youremail@example.com",
+        example: "mail@mail.com",
     })
     @IsEmail()
     email: string;
@@ -18,7 +18,7 @@ export class LoginUserDto {
         nullable: false,
         required: true,
         type: "string",
-        example: "Password123",
+        example: "Senha123",
     })
     @IsString()
     password: string;

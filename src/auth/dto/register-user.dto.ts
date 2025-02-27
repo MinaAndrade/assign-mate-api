@@ -1,16 +1,14 @@
 import { ApiProperty } from "@nestjs/swagger";
-
 import { IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, NotContains } from "class-validator";
-
 
 export class RegisterUserDto {
 
     @ApiProperty({
-        description: "Name",
+        description: "Nome",
         nullable: false,
         required: true,
         type: "string",
-        example: "John Sample",
+        example: "João Exemplo",
     })
     @IsString()
     @MinLength(3)
@@ -23,41 +21,41 @@ export class RegisterUserDto {
         nullable: false,
         required: true,
         type: "string",
-        example: "youremail@example.com",
+        example: "mail@mail.com",
     })
     @IsEmail()
     email: string;
     
     
     @ApiProperty({
-        description: "Password: Min 6 characters, 1 uppercase, 1 lowercase and 1 number",
+        description: "Senha: Mínimo de 6 caracteres, 1 letra maiúscula, 1 letra minúscula e 1 número",
         nullable: false,
         required: true,
         type: "string",
-        example: "Password123",
+        example: "Senha123",
     })
     @IsString()
     @MinLength(6)
     @MaxLength(16)
     @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, {
-        message: 'Password must contain at least one uppercase, one lowercase and one number',
+        message: 'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número',
     })
-    @NotContains(' ', { message: 'El password no debe contener espacios' }) 
+    @NotContains(' ', { message: 'A senha não deve conter espaços' }) 
     password: string;
     
     @ApiProperty({
-        description: "Confirm Password, it must be the same as the password",
+        description: "Confirmação de Senha, deve ser igual à senha",
         nullable: false,
         required: true,
         type: "string",
-        example: "Password123",
+        example: "Senha123",
     })
     @IsString()
     passwordconf: string;
     
 
     @ApiProperty({
-        description: "User Avatar Image",
+        description: "Imagem de Avatar do Usuário",
         nullable: true,
         required: false,
         type: "string",
@@ -67,5 +65,4 @@ export class RegisterUserDto {
     @IsOptional()
     image: string;
     
-
 }

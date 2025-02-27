@@ -20,7 +20,7 @@ export class UserRoleGuard implements CanActivate {
     
     const validRol: string[] = this.reflector.get(META_ROLES, context.getHandler());
 
-    //SI NO SE ESPECIFICAN ROLES, ENTONCES EL ACCESO ES PUBLICO
+    //SE NENHUMA FUNÇÃO FOR ESPECIFICADA, ENTÃO ACESSO PÚBLICO
     if (!validRol || validRol.length === 0) return true;
 
     const req = context.switchToHttp().getRequest();
