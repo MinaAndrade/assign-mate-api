@@ -18,12 +18,9 @@ export async function bootstrap() {
 
   // Swagger Configuration --------------------------------
 
-  // swaggerOptions, swaggerTitle, swaggerDescription variables are customized and defined in common/swagger/swagger.config.ts
-
   const config = new DocumentBuilder()
     .setTitle(swaggerTitle)
     .setDescription(swaggerDescription)
-    //.setContact('{ jc - develop }',  'https://github.com/JulianCallejas', 'micorreo@example.com')    //contact options website and email
     .setVersion('1.0')
     .addBearerAuth()
     .build();
