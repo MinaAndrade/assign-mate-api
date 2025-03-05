@@ -19,7 +19,7 @@ services:
   db:
     container_name: assign-mate-postgres
     image: postgres:16.5
-    restart: always
+    restart: no
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-assignmate}
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
