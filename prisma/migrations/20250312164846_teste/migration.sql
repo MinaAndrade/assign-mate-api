@@ -10,10 +10,9 @@ CREATE TYPE "ActivityType" AS ENUM ('N1', 'N2', 'N3', 'RECOVERY');
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
-    "fullName" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
     "dateOfBirth" TIMESTAMP(3) NOT NULL,
     "email" TEXT NOT NULL,
-    "username" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'user',
     "image" TEXT,
@@ -106,9 +105,6 @@ CREATE TABLE "_ClassToStudent" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
-
--- CreateIndex
-CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Class_classCode_key" ON "Class"("classCode");
