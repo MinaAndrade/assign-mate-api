@@ -55,7 +55,7 @@ export class AuthService {
       return {
         user: newuser,
         token: this.getJwtToken({
-          id: newuser.id,
+          id: newuser.id.toString(),
         })
       };
       

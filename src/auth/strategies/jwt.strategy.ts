@@ -29,7 +29,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
         try {
             const user = await this.prisma.user.findUniqueOrThrow({
-                where: {id},
+                where: {id: parseInt(id,10)},
                 select: {
                     id: true,
                     name: true,
@@ -39,7 +39,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
                     createdAt: true
                 }
             });
-            return user;
+            return { ...user, id: user.id.toString() };
         } catch (error) {
             throw new UnauthorizedException('Invalid token');
         }

@@ -6,7 +6,7 @@
 
 generator client {
   provider      = "prisma-client-js"
- binaryTargets = ["native", "linux-musl"]
+  binaryTargets = ["native", "linux-musl"]
 }
 
 datasource db {
@@ -17,19 +17,104 @@ datasource db {
 enum Role {
   admin
   user
+  professor
+  student
 }
 
-
 model User {
-  id            String    @id @default(uuid())
-  name          String
-  email         String    @unique
-  emailVerified DateTime?
-  password      String
-  role          Role      @default(user)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  //Relations and Indexes
- 
+  id              String   @id @default(uuid())
+  fullName        String
+  dateOfBirth     DateTime
+  email           String   @unique
+  username        String   @unique
+  password        String
+  role            Role     @default(user)
+  image           String?
+  emailVerified   DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  creationDate    DateTime @default(now())
+  students        Student[]
+  professors      Professor[]
+}
+
+model Course {
+  id          String    @id @default(uuid())
+  name        String
+  description String?
+  classes     Class[]
+  subjects    Subject[]
+}
+
+model Class {
+  id          String    @id @default(uuid())
+  classCode   String    @unique
+  year        Int
+  semester    Int
+  period      String
+  shift       String
+  courseId    String
+  course      Course    @relation(fields: [courseId], references: [id])
+  enrollmentDate DateTime
+  students    Student[]
+}
+
+model Student {
+  id         String  @id @default(uuid())
+  userId     String  @unique
+  user       User    @relation(fields: [userId], references: [id])
+  classes    Class[]
+  status     AcademicStatus
+  grades     Grade[]
+}
+
+enum AcademicStatus {
+  APPROVED
+  FAILED
+  FAILED_DUE_TO_ABSENCES
+}
+
+model Professor {
+  id         String  @id @default(uuid())
+  userId     String  @unique
+  user       User    @relation(fields: [userId], references: [id])
+  subjects   Subject[]
+}
+
+model Subject {
+  id         String    @id @default(uuid())
+  name       String
+  courseId   String
+  course     Course    @relation(fields: [courseId], references: [id])
+  professorId String?
+  professor  Professor? @relation(fields: [professorId], references: [id])
+  activities Activity[]
+  grades     Grade[]
+}
+
+model Activity {
+  id           String    @id @default(uuid())
+  name         String
+  type         ActivityType
+  maximumGrade Float
+  deadline     DateTime
+  subjectId    String
+  subject      Subject   @relation(fields: [subjectId], references: [id])
+}
+
+enum ActivityType {
+  N1
+  N2
+  N3
+  RECOVERY
+}
+
+model Grade {
+  id           String  @id @default(uuid())
+  studentId    String
+  student      Student @relation(fields: [studentId], references: [id])
+  subjectId    String
+  subject      Subject @relation(fields: [subjectId], references: [id])
+  value        Float
+  issueDate    DateTime @default(now())
 }

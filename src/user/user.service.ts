@@ -87,7 +87,7 @@ export class UserService {
         
     if (value !== user[field] && user.role !== 'admin') throw new UnauthorizedException('Unauthorized');
     
-    const whereData = field === 'id' ? {id: value} : {email: value};
+    const whereData = field === 'id' ? {id: parseInt(value), email: undefined} : {email: value, id: undefined};
     
     try {
       const user = await this.prisma.user.findUniqueOrThrow({
@@ -117,7 +117,7 @@ export class UserService {
 
     if (value !== user[field] && user.role !== 'admin') throw new UnauthorizedException('Unauthorized');
     
-    const whereData = field === 'id' ? {id: value} : {email: value};
+    const whereData = field === 'id' ? {id: parseInt(value)} : {email: value};
     
     if (user.role !== 'admin') delete dto.role;
 
@@ -157,7 +157,7 @@ export class UserService {
   async remove(field: string, value: string, user: User) {
     if (value !== user[field] && user.role !== 'admin') throw new UnauthorizedException('Unauthorized');
 
-    const whereData = field === 'id' ? {id: value} : {email: value};
+    const whereData = field === 'id' ? {id: parseInt(value), email: undefined} : {email: value, id: undefined};
 
     try {
       const deletedUser = await this.prisma.user.delete({
