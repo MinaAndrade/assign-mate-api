@@ -1,22 +1,31 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, NotContains } from "class-validator";
+import { IsDate, IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, NotContains } from "class-validator";
 
 export class RegisterUserDto {
-
     @ApiProperty({
-        description: "Nome",
+        description: "User's full name",
         nullable: false,
         required: true,
         type: "string",
-        example: "João Exemplo",
+        example: "John Doe",
     })
     @IsString()
     @MinLength(3)
     name: string;
 
-    
     @ApiProperty({
-        description: "Email",
+        description: "User's date of birth",
+        nullable: false,
+        required: true,
+        type: "string",
+        format: "date-time",
+        example: "1990-01-01T00:00:00.000Z",
+    })
+    @IsDate()
+    dateOfBirth: Date;
+
+    @ApiProperty({
+        description: "User's email address",
         uniqueItems: true,
         nullable: false,
         required: true,
@@ -25,37 +34,35 @@ export class RegisterUserDto {
     })
     @IsEmail()
     email: string;
-    
-    
+
     @ApiProperty({
-        description: "Senha: Mínimo de 6 caracteres, 1 letra maiúscula, 1 letra minúscula e 1 número",
+        description: "Password: Minimum of 6 characters, 1 uppercase letter, 1 lowercase letter, and 1 number",
         nullable: false,
         required: true,
         type: "string",
-        example: "Senha123",
+        example: "Password123",
     })
     @IsString()
     @MinLength(6)
     @MaxLength(16)
     @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, {
-        message: 'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número',
+        message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number',
     })
-    @NotContains(' ', { message: 'A senha não deve conter espaços' }) 
+    @NotContains(' ', { message: 'Password must not contain spaces' })
     password: string;
-    
+
     @ApiProperty({
-        description: "Confirmação de Senha, deve ser igual à senha",
+        description: "Password confirmation, must match the password",
         nullable: false,
         required: true,
         type: "string",
-        example: "Senha123",
+        example: "Password123",
     })
     @IsString()
     passwordconf: string;
-    
 
     @ApiProperty({
-        description: "Imagem de Avatar do Usuário",
+        description: "User's profile image URL",
         nullable: true,
         required: false,
         type: "string",
@@ -63,6 +70,5 @@ export class RegisterUserDto {
     })
     @IsString()
     @IsOptional()
-    image: string;
-    
+    image?: string;
 }
