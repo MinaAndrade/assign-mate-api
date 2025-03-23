@@ -1,99 +1,41 @@
-import { PrismaClient } from '@prisma/client'
-import { hash } from 'bcryptjs'
+import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
-  // Criando um usuário (Admin)
-  const userAdmin = await prisma.user.create({
-    data: {
-      name: 'Admin User',
-      email: 'admin@example.com',
-      password: await hash('adminpassword', 10), // Senha criptografada
-      isAdmin: true,
-      dateOfBirth: new Date('1990-01-01'),
-      image: 'https://example.com/admin-image.png',
-      emailVerified: new Date(),
-    },
-  })
+  const defaultAdminEmail = process.env.DEFAULT_ADMIN_EMAIL;
+  const defaultAdminPassword = process.env.DEFAULT_ADMIN_PASSWORD;
 
-  // Criando um usuário (Aluno)
-  const userStudent = await prisma.user.create({
-    data: {
-      name: 'Student User',
-      email: 'student@example.com',
-      password: await hash('studentpassword', 10), // Senha criptografada
-      dateOfBirth: new Date('2000-01-01'),
-    },
-  })
+  if (!defaultAdminEmail || !defaultAdminPassword) {
+    throw new Error('Variáveis de ambiente do admin padrão não configuradas');
+  }
 
-  // Criando um curso
-  const course = await prisma.course.create({
-    data: {
-      name: 'Curso de Tecnologia',
-      description: 'Curso focado em tecnologia e programação.',
-    },
-  })
+  // Verifica se o admin já existe
+  const existingAdmin = await prisma.admin.findUnique({
+    where: { email: defaultAdminEmail },
+  });
 
-  // Criando uma disciplina (subject)
-  const subject = await prisma.subject.create({
-    data: {
-      name: 'Desenvolvimento Web',
-      courseId: course.id,
-    },
-  })
-
-  // Criando uma turma
-  const classData = await prisma.class.create({
-    data: {
-      classCode: 'T1-2025',
-      year: 2025,
-      semester: 1,
-      period: 'Manhã',
-      shift: 'Diurno',
-      courseId: course.id,
-      enrollmentDate: new Date(),
-    },
-  })
-
-  // Atribuindo o aluno à turma
-  await prisma.student.create({
-    data: {
-      userId: userStudent.id,
-      status: 'APPROVED',
-      classes: {
-        connect: { id: classData.id },
+  if (!existingAdmin) {
+    const hashedPassword = await bcrypt.hash(defaultAdminPassword, 10);
+    
+    await prisma.admin.create({
+      data: {
+        email: defaultAdminEmail,
+        password: hashedPassword,
       },
-    },
-  })
-
-  // Criando uma atividade para a disciplina
-  const activity = await prisma.activity.create({
-    data: {
-      name: 'Prova N1',
-      type: 'N1',
-      maximumGrade: 10,
-      deadline: new Date('2025-06-01'),
-      subjectId: subject.id,
-    },
-  })
-
-  // Criando uma nota para o aluno
-  await prisma.grade.create({
-    data: {
-      studentId: userStudent.id,
-      subjectId: subject.id,
-      value: 8.5,
-    },
-  })
-
-  console.log('Seed data successfully added')
+    });
+    console.log('Admin padrão criado com sucesso');
+  } else {
+    console.log('Admin padrão já existe');
+  }
 }
 
 main()
-  .catch(e => {
-    throw e
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect()
-  })
+    await prisma.$disconnect();
+  });

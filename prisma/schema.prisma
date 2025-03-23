@@ -8,86 +8,54 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id              String      @id @default(uuid())
-  name            String
-  dateOfBirth     DateTime
-  email           String      @unique
-  password        String
-  image           String?
-  emailVerified   DateTime?
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
-  creationDate    DateTime    @default(now())
-  isAdmin         Boolean     @default(false) 
-  student         Student?    
-  professor       Professor?  
-}
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-model Course {
-  id          String    @id @default(uuid())
-  name        String
-  description String?
-  classes     Class[]
-  subjects    Subject[]
-}
-
-model Class {
-  id             String    @id @default(uuid())
-  classCode      String    @unique
-  year           Int
-  semester       Int
-  period         String
-  shift          String
-  courseId       String
-  course         Course    @relation(fields: [courseId], references: [id])
-  enrollmentDate DateTime
-  students       Student[]
-}
-
-model Student {
-  id         String  @id @default(uuid())
-  userId     String  @unique
-  user       User    @relation(fields: [userId], references: [id])
-  classes    Class[]
-  status     String  // Exemplo: "APPROVED", "FAILED", "FAILED_DUE_TO_ABSENCES"
-  grades     Grade[]
+  professores Professor[]
+  alunos      Aluno[]
+  cursos      Curso[]
 }
 
 model Professor {
-  id         String    @id @default(uuid())
-  userId     String    @unique
-  user       User      @relation(fields: [userId], references: [id])
-  subjects   Subject[]
+  id            Int      @id @default(autoincrement())
+  matricula     String   @unique
+  nomeCompleto  String
+  dataNascimento DateTime
+  especialidade  String
+  email         String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  adminId       Int
+  admin         Admin    @relation(fields: [adminId], references: [id])
 }
 
-model Subject { //assunto
-  id           String    @id @default(uuid())
-  name         String
-  courseId     String
-  course       Course    @relation(fields: [courseId], references: [id])
-  professorId  String?
-  professor    Professor? @relation(fields: [professorId], references: [id])
-  activities   Activity[]
-  grades       Grade[]
+model Aluno {
+  id            Int      @id @default(autoincrement())
+  matricula     String   @unique
+  nomeCompleto  String
+  dataNascimento DateTime
+  curso         String
+  email         String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  adminId       Int
+  admin         Admin    @relation(fields: [adminId], references: [id])
 }
 
-model Activity {
-  id           String    @id @default(uuid())
-  name         String
-  type         String  // Exemplo: "N1", "N2", "N3", "RECOVERY"
-  maximumGrade Float
-  deadline     DateTime
-  subjectId    String
-  subject      Subject   @relation(fields: [subjectId], references: [id])
-}
+model Curso {
+  id            Int      @id @default(autoincrement())
+  codigo        String   @unique
+  nome          String
+  descricao     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-model Grade {
-  id           String  @id @default(uuid())
-  studentId    String
-  student      Student @relation(fields: [studentId], references: [id])
-  subjectId    String
-  subject      Subject @relation(fields: [subjectId], references: [id])
-  value        Float
-  issueDate    DateTime @default(now())
+  adminId       Int
+  admin         Admin    @relation(fields: [adminId], references: [id])
 }
