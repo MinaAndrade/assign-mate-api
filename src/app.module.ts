@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from './prisma/prisma.module';
 import { AdminModule } from './admin/admin.module';
 import { ProfessorModule } from './professor/professor.module';
+import { AlunoModule } from './aluno/aluno.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { ProfessorModule } from './professor/professor.module';
     AuthModule,
     PrismaModule,
     AdminModule,
-    ProfessorModule
+    ProfessorModule,
+    AlunoModule
   ],
   controllers: [],
   providers: [AppService],
