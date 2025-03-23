@@ -1,59 +1,44 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus } from '@nestjs/common';
-
-import { RegisterUserDto } from './dto/register-user.dto';
+import { Controller, Post, Body, Res, HttpStatus, Get, HttpCode } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginResponse } from './interfaces';
-import { Auth, GetUser } from './decorators';
-
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { RegisterUserDto } from './dto/register-user.dto';
 import { LoginUserDto } from './dto/login-user.dto';
-import { User } from 'src/user/entities/user.entity';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { User } from '@prisma/client';
+import { Auth } from './decorators/auth.decorator';
+import { GetUser } from './decorators/get-user.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  @ApiOperation({
-    summary: 'REGISTER',
-    description: 'Public endpoint to register a new user with "user" Role.'
-  })
-  @ApiResponse({status: 201, description: 'Ok', type: LoginResponse})          
-  @ApiResponse({status: 400, description: 'Bad request'})
-  @ApiResponse({status: 500, description: 'Server error'})             //Swagger
-  register(@Body() createUserDto: RegisterUserDto) {
-    return this.authService.registerUser(createUserDto);
+  @ApiOperation({ summary: 'REGISTER', description: 'Public endpoint to register a new user.' })
+  @ApiResponse({ status: 201, description: 'User registered successfully.' })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 500, description: 'Server error.' })
+  async register(@Body() registerUserDto: RegisterUserDto): Promise<User> {
+    return this.authService.registerUser(registerUserDto);
   }
 
   @Post('login')
-  @ApiOperation({
-    summary: 'LOGIN',
-    description: 'Public endpoint to login and get the Access Token'
-  })
-  @ApiResponse({status: 200, description: 'Ok', type: LoginResponse})
-  @ApiResponse({status: 400, description: 'Bad request'})     
-  @ApiResponse({status: 500, description: 'Server error'})             //Swagger
-  async login(@Res() response, @Body() loginUserDto: LoginUserDto) {
-    const data = await this.authService.loginUser(loginUserDto.email, loginUserDto.password);
-    response.status(HttpStatus.OK).send(data);
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'LOGIN', description: 'Public endpoint to login and get the Access Token.' })
+  @ApiResponse({ status: 200, description: 'Login successful.' })
+  @ApiResponse({ status: 400, description: 'Bad request.' })
+  @ApiResponse({ status: 500, description: 'Server error.' })
+  async login(@Body() loginUserDto: LoginUserDto) {
+    return this.authService.loginUser(loginUserDto.email, loginUserDto.password);
   }
 
   @Get('refresh-token')
-  @ApiOperation({
-    summary: 'REFRESH TOKEN',
-    description: 'Private endpoint allowed for logged in users to refresh the Access Token before it expires.'
-  })
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'REFRESH TOKEN', description: 'Private endpoint to refresh the Access Token.' })
   @ApiBearerAuth()
-  @ApiResponse({status: 200, description: 'Ok', type: LoginResponse})
-  @ApiResponse({status: 401, description: 'Unauthorized'})             //Swagger
+  @ApiResponse({ status: 200, description: 'Token refreshed successfully.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
   @Auth()
-  refreshToken(
-    @GetUser() user: User
-  ){
+  refreshToken(@GetUser() user: User) {
     return this.authService.refreshToken(user);
   }
-
-
-
 }

@@ -1,9 +1,11 @@
 import { PartialType } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
-import { IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsDate } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-    @IsString()
+    @IsDate()
     @IsOptional()
-    updatedAt?: string
+    @Type(() => Date) 
+    updatedAt?: Date;
 }

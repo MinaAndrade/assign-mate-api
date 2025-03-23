@@ -1,14 +1,5 @@
-import { UseGuards, applyDecorators } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { SetMetadata } from '@nestjs/common';
 
-import { RolProtected } from './rol-protected.decorator';
-import { UserRoleGuard } from '../guards/user-role/user-role.guard';
-import { Role } from '@prisma/client';
-
-export function Auth(...roles: Role[]) {
-
-  return applyDecorators(
-    RolProtected(...roles),
-    UseGuards(AuthGuard(), UserRoleGuard)
-  );
-}
+export const IS_PUBLIC_KEY = 'isPublic';
+export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
+export const Auth = () => SetMetadata(IS_PUBLIC_KEY, false);

@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl"]
@@ -14,27 +8,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  admin
-  user
-  professor
-  student
-}
-
 model User {
-  id              String   @id @default(uuid())
+  id              String      @id @default(uuid())
   name            String
   dateOfBirth     DateTime
-  email           String   @unique
+  email           String      @unique
   password        String
-  role            Role     @default(user)
   image           String?
   emailVerified   DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  creationDate    DateTime @default(now())
-  students        Student[]
-  professors      Professor[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  creationDate    DateTime    @default(now())
+  isAdmin         Boolean     @default(false) 
+  student         Student?    
+  professor       Professor?  
 }
 
 model Course {
@@ -46,16 +33,16 @@ model Course {
 }
 
 model Class {
-  id          String    @id @default(uuid())
-  classCode   String    @unique
-  year        Int
-  semester    Int
-  period      String
-  shift       String
-  courseId    String
-  course      Course    @relation(fields: [courseId], references: [id])
+  id             String    @id @default(uuid())
+  classCode      String    @unique
+  year           Int
+  semester       Int
+  period         String
+  shift          String
+  courseId       String
+  course         Course    @relation(fields: [courseId], references: [id])
   enrollmentDate DateTime
-  students    Student[]
+  students       Student[]
 }
 
 model Student {
@@ -63,49 +50,36 @@ model Student {
   userId     String  @unique
   user       User    @relation(fields: [userId], references: [id])
   classes    Class[]
-  status     AcademicStatus
+  status     String  // Exemplo: "APPROVED", "FAILED", "FAILED_DUE_TO_ABSENCES"
   grades     Grade[]
-}
-
-enum AcademicStatus {
-  APPROVED
-  FAILED
-  FAILED_DUE_TO_ABSENCES
 }
 
 model Professor {
-  id         String  @id @default(uuid())
-  userId     String  @unique
-  user       User    @relation(fields: [userId], references: [id])
+  id         String    @id @default(uuid())
+  userId     String    @unique
+  user       User      @relation(fields: [userId], references: [id])
   subjects   Subject[]
 }
 
-model Subject {
-  id         String    @id @default(uuid())
-  name       String
-  courseId   String
-  course     Course    @relation(fields: [courseId], references: [id])
-  professorId String?
-  professor  Professor? @relation(fields: [professorId], references: [id])
-  activities Activity[]
-  grades     Grade[]
+model Subject { //assunto
+  id           String    @id @default(uuid())
+  name         String
+  courseId     String
+  course       Course    @relation(fields: [courseId], references: [id])
+  professorId  String?
+  professor    Professor? @relation(fields: [professorId], references: [id])
+  activities   Activity[]
+  grades       Grade[]
 }
 
 model Activity {
   id           String    @id @default(uuid())
   name         String
-  type         ActivityType
+  type         String  // Exemplo: "N1", "N2", "N3", "RECOVERY"
   maximumGrade Float
   deadline     DateTime
   subjectId    String
   subject      Subject   @relation(fields: [subjectId], references: [id])
-}
-
-enum ActivityType {
-  N1
-  N2
-  N3
-  RECOVERY
 }
 
 model Grade {

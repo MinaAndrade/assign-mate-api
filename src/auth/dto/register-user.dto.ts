@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDate, IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, NotContains } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDate, IsEmail, IsOptional, IsString, Matches, MaxLength, MinLength, NotContains, IsBoolean } from "class-validator";
 
 export class RegisterUserDto {
     @ApiProperty({
@@ -22,6 +23,7 @@ export class RegisterUserDto {
         example: "1990-01-01T00:00:00.000Z",
     })
     @IsDate()
+    @Type(() => Date)
     dateOfBirth: Date;
 
     @ApiProperty({
@@ -71,4 +73,13 @@ export class RegisterUserDto {
     @IsString()
     @IsOptional()
     image?: string;
+
+    // Permitir isAdmin como campo opcional, mas com valor padrão true
+    @ApiProperty({
+        description: "Whether the user has administrative privileges",
+        example: true,
+        required: false,
+    })
+    @IsBoolean()
+    isAdmin?: boolean = true;  // Permite isAdmin como campo opcional
 }

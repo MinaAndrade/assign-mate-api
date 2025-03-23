@@ -1,63 +1,63 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Role } from "@prisma/client";
-import { IsDate, IsEmail, IsOptional, IsString } from "class-validator";
+import { IsString, IsEmail, IsDateString, IsOptional, IsBoolean, Matches } from "class-validator";
+import { Type } from "class-transformer";
 
-import { RegisterUserDto } from "src/auth/dto/register-user.dto";
-
-export class CreateUserDto extends RegisterUserDto {
-    @ApiProperty({
-        description: "User Role (admin, user, professor, student)",
-        default: "user",
-        type: "string",
-        example: "user",
-    })
-    @IsString()
-    @IsOptional()
-    role?: Role;
-
+export class CreateUserDto {
     @ApiProperty({
         description: "User's full name",
-        example: "John Doe",
+        example: "John Sample",
     })
     @IsString()
     name: string;
 
     @ApiProperty({
-        description: "User's date of birth",
-        example: "1990-01-01T00:00:00.000Z",
-    })
-    @IsDate()
-    dateOfBirth: Date;
-
-    @ApiProperty({
         description: "User's email address",
-        example: "john.doe@example.com",
+        example: "youremail@example.com",
     })
     @IsEmail()
     email: string;
 
     @ApiProperty({
-        description: "User's password",
-        example: "strongPassword123",
+        description: "User's date of birth",
+        format: "date-time",
+        example: "1990-01-01T00:00:00.000Z",
+    })
+    @IsDateString()
+    @Type(() => Date)
+    dateOfBirth: Date;
+
+    @ApiProperty({
+        description: "Password to be set for the user",
+        example: "strongpassword123",
     })
     @IsString()
+    @Matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&]{8,}$/, {
+        message: 'Password too weak. It must contain at least one letter, one number, and be at least 8 characters long.',
+    })
     password: string;
 
     @ApiProperty({
-        description: "URL to the user's profile image",
-        example: "https://example.com/profile.jpg",
-        required: false,
+        description: "Confirm the password",
+        example: "strongpassword123",
     })
     @IsString()
-    @IsOptional()
-    image?: string;
+    passwordconf: string;
 
     @ApiProperty({
-        description: "Timestamp when the user's email was verified",
-        example: "2023-10-01T00:00:00.000Z",
+        description: "Whether the user has administrative privileges",
+        example: false,
         required: false,
     })
-    @IsDate()
     @IsOptional()
-    emailVerified?: Date;
+    @IsBoolean()
+    isAdmin?: boolean;
+
+    @ApiProperty({
+        description: "URL to the user's profile image",
+        example: "https://picsum.photos/200",
+        required: false,
+    })
+    @IsOptional()
+    @IsString()
+    image?: string;
 }

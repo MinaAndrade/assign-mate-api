@@ -1,12 +1,3 @@
--- CreateEnum
-CREATE TYPE "Role" AS ENUM ('admin', 'user', 'professor', 'student');
-
--- CreateEnum
-CREATE TYPE "AcademicStatus" AS ENUM ('APPROVED', 'FAILED', 'FAILED_DUE_TO_ABSENCES');
-
--- CreateEnum
-CREATE TYPE "ActivityType" AS ENUM ('N1', 'N2', 'N3', 'RECOVERY');
-
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
@@ -14,12 +5,12 @@ CREATE TABLE "User" (
     "dateOfBirth" TIMESTAMP(3) NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "role" "Role" NOT NULL DEFAULT 'user',
     "image" TEXT,
     "emailVerified" TIMESTAMP(3),
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "creationDate" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -51,7 +42,7 @@ CREATE TABLE "Class" (
 CREATE TABLE "Student" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
-    "status" "AcademicStatus" NOT NULL,
+    "status" TEXT NOT NULL,
 
     CONSTRAINT "Student_pkey" PRIMARY KEY ("id")
 );
@@ -78,7 +69,7 @@ CREATE TABLE "Subject" (
 CREATE TABLE "Activity" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "type" "ActivityType" NOT NULL,
+    "type" TEXT NOT NULL,
     "maximumGrade" DOUBLE PRECISION NOT NULL,
     "deadline" TIMESTAMP(3) NOT NULL,
     "subjectId" TEXT NOT NULL,
