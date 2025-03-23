@@ -31,6 +31,4 @@ export class AdminService {
       createdAt: admin.createdAt,
     };
   }
-
-  // Adicione outros métodos conforme necessário
 }

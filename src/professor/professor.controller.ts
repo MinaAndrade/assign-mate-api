@@ -37,7 +37,6 @@ export class ProfessorController {
     description: 'Dados inválidos'
   })
   create(@Req() req, @Body() createProfessorDto: CreateProfessorDto) {
-    // Garantir que o adminId está sendo extraído corretamente
     const adminId = req.user.id; // Alteração importante aqui
     return this.professorService.create(adminId, createProfessorDto);
   }
