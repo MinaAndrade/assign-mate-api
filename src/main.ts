@@ -15,8 +15,6 @@ export async function bootstrap() {
     })
   );
 
-  // Swagger Configuration --------------------------------
-
   const config = new DocumentBuilder()
     .setTitle(swaggerTitle)
     .setDescription(swaggerDescription)
@@ -26,8 +24,6 @@ export async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   
   SwaggerModule.setup('api', app, document, swaggerOptions);
-
-  // End Swagger Configurations --------------------------------
 
 
   //Enable CORS
