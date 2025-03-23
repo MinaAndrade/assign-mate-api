@@ -14,7 +14,7 @@ export class AlunoService {
       data: {
         ...createAlunoDto,
         dataNascimento: new Date(createAlunoDto.dataNascimento),
-        admin: { connect: { id: adminId } }
+        adminId: adminId
       }
     });
   }

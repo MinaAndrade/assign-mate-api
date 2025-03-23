@@ -38,11 +38,7 @@ export class AlunoController {
   })
   @Post()
   create(@Req() req, @Body() createAlunoDto: CreateAlunoDto) {
-    // Verifique se o adminId está sendo extraído corretamente
-    const adminId = req.user?.sub;
-    if (!adminId) {
-      throw new UnauthorizedException('Admin não autenticado');
-    }
+    const adminId = req.user.id
     return this.alunoService.create(adminId, createAlunoDto);
   }
 
