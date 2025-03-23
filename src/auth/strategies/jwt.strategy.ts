@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { JwtPayload } from '../interfaces/jwt-payload.interface';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -14,28 +13,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload) {
-    const { id } = payload;
-  
-    // Busca o usuário no banco de dados
-    const user = await this.prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        image: true,
-        dateOfBirth: true, 
-        isAdmin: true,
-        createdAt: true,
-      },
+  async validate(payload: any) {
+    return this.prisma.admin.findUnique({
+      where: { id: payload.sub },
+      select: { id: true, email: true, createdAt: true },
     });
-  
-    if (!user) {
-      throw new Error('User not found');
-    }
-  
-    return user;
   }
-  
 }
