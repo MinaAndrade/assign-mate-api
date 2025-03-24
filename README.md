@@ -1,4 +1,4 @@
-<h1 align="center" > NestJS Auth REST API Template </h1>
+<h1 align="center" > NestJS AssingMate REST API </h1>
 
 <p align="center">
 <img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" />
@@ -6,21 +6,9 @@
 
 ## Descrição
 
-**`NestJS Auth REST API Template`** com autenticação JWT.
+**`NestJS AssingMate REST API`** com autenticação JWT.
 
-Este **`NestJS Auth REST API Template`** foi projetado para dar um impulso inicial ao seu processo de desenvolvimento com um sistema de autenticação de usuário robusto e rotas protegidas. Construído usando Nest.js, Prisma e Postgres, este modelo fornece recursos essenciais, como registro de usuário, login, autenticação JWT e uma API CRUD para gerenciar usuários. A API também é totalmente documentada usando Swagger para fácil integração e compreensão.
-
-## Principais recursos
-
-- Registro de usuário: permite que os usuários criem novas contas com segurança.
-
-- Login e autenticação: autentique usuários usando tokens JWT para acesso seguro a rotas protegidas.
-
-- Rotas protegidas: implemente controle de acesso baseado em função para garantir que apenas usuários autorizados possam acessar endpoints específicos.
-
-- Operações CRUD do usuário: simplifique o gerenciamento de usuários com operações CRUD para criar, ler, atualizar e excluir dados do usuário.
-
-- Documentação do Swagger: documentação abrangente com a interface do usuário do Swagger para fácil exploração e integração de API.
+Este **`NestJS AssingMate REST API`** foi projetado para dar um impulso inicial ao seu processo de desenvolvimento com um sistema de autenticação de usuário robusto e rotas protegidas. Construído usando Nest.js, Prisma e Postgres, este modelo fornece recursos essenciais, como registro de usuário, login, autenticação JWT e uma API CRUD para gerenciar usuários. A API também é totalmente documentada usando Swagger para fácil integração e compreensão.
 
 ## Tecnologias usadas
 
@@ -32,60 +20,60 @@ Este **`NestJS Auth REST API Template`** foi projetado para dar um impulso inici
 
 - JWT: tokens da Web JSON para autenticação e autorização seguras.
 
-## Primeiros passos
+
+
+## Primeiros Passos
 
 ### 1. Clone o repositório
-### 2. Instale dependências
 ```bash
-npm install
+git clone https://github.com/FilipeeOliveira/assign-mate-api
 ```
-### 3. Atualize o arquivo .env
-Veja o arquivo `.env.template` para mais informações
 
-### 4. Inicie o contêiner do BD
-O Docker Desktop deve estar aberto
+### 2. Atualize o arquivo `.env`
+Veja o arquivo `.env.example` para mais informações sobre como configurar seu ambiente.
+
+### 3. Inicie o contêiner do banco de dados
+Certifique-se de que o Docker Desktop esteja aberto e em execução. Em seguida, inicie o contêiner:
 ```bash
 docker compose up -d
 ```
-### 5. Crie tabelas do BD
+
+### 4. Entre no Ambiente de Desenvolvimento Node
+
+Acesse o ambiente de desenvolvimento Node.js com:
+
 ```bash
-npx prisma migrate dev --name "Initial Schema"
+docker compose exec api bash
 ```
-### 6. Preencha as tabelas do BD
-Dois usuários serão criados. O primeiro como administrador `p1@correo.com` e o segundo como usuário `p2@correo.com`, mesma senha para ambos `123456`.
+
+### 5. Instale as dependências
+```bash
+npm install
+```
+
+### 6. Crie as tabelas do banco de dados
+Com o contêiner do banco de dados em funcionamento, crie as tabelas:
+```bash
+npx prisma migrate dev --name "Nome do Schema"
+```
+
+### 7. Preencha as tabelas do banco de dados
+O script de seed criará um user: como administrador (`admin@escola.com`).
 ```bash
 npm run seed
 ```
 
-### 7. Execute o servidor de desenvolvimento:
-
+### 8. Execute o servidor de desenvolvimento
+Agora, você pode rodar o servidor:
 ```bash
-npm run dev
+npm run start:dev
 ```
 
 ## Documentação
 
 ### Swagger
 
-A documentação da API é gerada usando o Swagger, um conjunto poderoso, mas fácil de usar, de ferramentas de desenvolvedor de API para equipes e indivíduos, permitindo o desenvolvimento em todo o ciclo de vida da API, desde o design e a documentação até o teste e a implantação.
-Você pode acessar uma versão demo da documentação do Swagger para este APY no seguinte link: [**`NestJS Auth REST API Template Swagger Documentation`**](https://juliancallejas.github.io/NestJS-Auth-REST-API-Template-SwaggerDoc/)
-
-Você também pode acessar a documentação do Swagger com a REST API em execução localmente visitando <a href="http://localhost:3000/api" >http://localhost:3000/api</a>.
-
-### Postman
-
-Além da documentação do Swagger, também fornecemos uma documentação abrangente do Postman para a **`NestJS Auth REST API`**.
-
-A coleção de documentação do Postman está disponível em [**`NestJS Auth REST API Template Postman Documentation`**](https://www.postman.com/jc-develop/workspace/nest-auth-rest-apis/documentation/22997111-3a008800-dea9-4b27-b1bc-2a3ac5be1e33)
-
-Observe que você precisará ter o Postman instalado em sua máquina para importar e usar a coleção.
-
-Nossa documentação do Postman inclui uma coleção de cerca de **160 testes** que abrangem todos os pontos de extremidade da API. Esses testes servem como um recurso valioso para entender os padrões esperados de solicitação e resposta e para validar a funcionalidade da API. Este é o relatório para a última execução de teste com 3 iterações: [**`NestJS Auth REST API Template PostgreSQL Prisma Tests`**](https://juliancallejas.github.io/NestJS-Auth-REST-API-Template-Postgres-Prisma-Test/)
-
-Você pode acessar a coleção de testes em [**`NestJS Auth REST API Template Postman Test Collection`**](https://www.postman.com/jc-develop/workspace/nest-auth-rest-apis/documentation/22997111-7ae8198b-97f8-4e01-9830-77dd1e10088b)
-
-## Contribuição
-Contribuições são bem-vindas! Sinta-se à vontade para bifurcar este repositório, fazer melhorias e enviar solicitações de pull para aprimorar a funcionalidade ou adicionar novos recursos.
+Você também pode acessar a documentação do Swagger com a REST API em execução localmente visitando <a href="http://localhost:3000/api" >http://localhost:3005/api</a>.
 
 ## Licença
 Este projeto é licenciado sob a Licença MIT - veja o arquivo LICENSE para detalhes.
