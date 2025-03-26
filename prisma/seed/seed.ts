@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
+  // Criação do Admin
   const defaultAdminEmail = process.env.DEFAULT_ADMIN_EMAIL;
   const defaultAdminPassword = process.env.DEFAULT_ADMIN_PASSWORD;
 
@@ -11,24 +12,94 @@ async function main() {
     throw new Error('Variáveis de ambiente do admin padrão não configuradas');
   }
 
-  // Verifica se o admin já existe
-  const existingAdmin = await prisma.admin.findUnique({
+  let admin = await prisma.admin.findUnique({
     where: { email: defaultAdminEmail },
   });
 
-  if (!existingAdmin) {
+  if (!admin) {
     const hashedPassword = await bcrypt.hash(defaultAdminPassword, 10);
-    
-    await prisma.admin.create({
+    admin = await prisma.admin.create({
       data: {
         email: defaultAdminEmail,
         password: hashedPassword,
       },
     });
     console.log('Admin padrão criado com sucesso');
-  } else {
-    console.log('Admin padrão já existe');
   }
+
+  // Criação de Cursos
+  const cursos = await prisma.curso.createMany({
+    data: [
+      {
+        codigo: 'MAT101',
+        nome: 'Matemática Básica',
+        descricao: 'Introdução à matemática elementar',
+        adminId: admin.id,
+      },
+      {
+        codigo: 'FIS201',
+        nome: 'Física Geral',
+        descricao: 'Conceitos básicos de física',
+        adminId: admin.id,
+      },
+      {
+        codigo: 'PROG301',
+        nome: 'Programação I',
+        descricao: 'Introdução à programação',
+        adminId: admin.id,
+      },
+    ],
+    skipDuplicates: true,
+  });
+  console.log(`${cursos.count} cursos criados`);
+
+  // Criação de Professores
+  const professores = await prisma.professor.createMany({
+    data: [
+      {
+        matricula: 'PROF001',
+        nomeCompleto: 'Ana Silva',
+        dataNascimento: new Date('1980-05-15'),
+        especialidade: 'Matemática',
+        email: 'ana.silva@escola.com',
+        adminId: admin.id,
+      },
+      {
+        matricula: 'PROF002',
+        nomeCompleto: 'Carlos Oliveira',
+        dataNascimento: new Date('1975-11-22'),
+        especialidade: 'Física',
+        email: 'carlos.oliveira@escola.com',
+        adminId: admin.id,
+      },
+    ],
+    skipDuplicates: true,
+  });
+  console.log(`${professores.count} professores criados`);
+
+  // Criação de Alunos
+  const alunos = await prisma.aluno.createMany({
+    data: [
+      {
+        matricula: 'ALU001',
+        nomeCompleto: 'João Pereira',
+        dataNascimento: new Date('2005-03-20'),
+        curso: 'Matemática Básica',
+        email: 'joao.pereira@escola.com',
+        adminId: admin.id,
+      },
+      {
+        matricula: 'ALU002',
+        nomeCompleto: 'Maria Santos',
+        dataNascimento: new Date('2006-07-12'),
+        curso: 'Programação I',
+        email: 'maria.santos@escola.com',
+        adminId: admin.id,
+      },
+    ],
+    skipDuplicates: true,
+  });
+  console.log(`${alunos.count} alunos criados`);
 }
 
 main()
