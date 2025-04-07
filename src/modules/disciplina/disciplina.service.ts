@@ -14,8 +14,21 @@ export class DisciplinaService {
     
     return this.prisma.disciplina.create({
       data: {
-        ...createDisciplinaDto,
-        adminId
+        codigo: createDisciplinaDto.codigo,
+        nome: createDisciplinaDto.nome,
+        descricao: createDisciplinaDto.descricao,
+        cargaHoraria: createDisciplinaDto.cargaHoraria,
+        periodo: createDisciplinaDto.periodo,
+        curso: {
+          connect: {
+            id: createDisciplinaDto.cursoId
+          }
+        },
+        admin: {
+          connect: {
+            id: adminId
+          }
+        }
       }
     });
   }

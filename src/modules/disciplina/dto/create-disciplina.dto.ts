@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsString, Length, Max, Min } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString, Length, Max, Min } from 'class-validator';
 
 export class CreateDisciplinaDto {
   @ApiProperty({ example: 'MAT101', description: 'Código único da disciplina' })
@@ -28,5 +28,6 @@ export class CreateDisciplinaDto {
 
   @ApiProperty({ example: 1, description: 'ID do curso relacionado' })
   @IsInt()
+  @IsNotEmpty()
   cursoId: number;
 }

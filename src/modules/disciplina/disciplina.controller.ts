@@ -19,7 +19,7 @@ export class DisciplinaController {
   @ApiOperation({ summary: 'Criar nova disciplina', description: 'Vincula a um curso existente' })
   @ApiResponse({ status: 201, description: 'Disciplina criada', type: DisciplinaResponseDto })
   create(@Req() req, @Body() createDisciplinaDto: CreateDisciplinaDto) {
-    return this.disciplinaService.create(req.user.sub, createDisciplinaDto);
+    return this.disciplinaService.create(req.user.id, createDisciplinaDto);
   }
 
   @Get()
