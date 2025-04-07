@@ -6,6 +6,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { ProfessorModule } from './modules/professor/professor.module';
 import { AlunoModule } from './modules/aluno/aluno.module';
 import { CursoModule } from './modules/curso/curso.module';
+import { DisciplinaModule } from './modules/disciplina/disciplina.module';
 
 
 @Module({
@@ -17,6 +18,7 @@ import { CursoModule } from './modules/curso/curso.module';
     ProfessorModule,
     AlunoModule,
     CursoModule,
+    DisciplinaModule
   ],
   controllers: [],
   providers: [],

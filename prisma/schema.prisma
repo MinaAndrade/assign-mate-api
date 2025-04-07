@@ -18,6 +18,7 @@ model Admin {
   professores Professor[]
   alunos      Aluno[]
   cursos      Curso[]
+  Disciplina  Disciplina[]
 }
 
 model Professor {
@@ -56,6 +57,23 @@ model Curso {
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
+  adminId       Int
+  admin         Admin    @relation(fields: [adminId], references: [id])
+  Disciplina    Disciplina[]
+}
+
+model Disciplina {
+  id            Int      @id @default(autoincrement())
+  codigo        String   @unique
+  nome          String
+  descricao     String?
+  cargaHoraria  Int
+  periodo       String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  cursoId       Int
+  curso         Curso    @relation(fields: [cursoId], references: [id])
   adminId       Int
   admin         Admin    @relation(fields: [adminId], references: [id])
 }

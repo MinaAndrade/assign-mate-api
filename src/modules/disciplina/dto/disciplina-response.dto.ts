@@ -1,0 +1,48 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
+
+export class DisciplinaResponseDto {
+  @Expose()
+  @ApiProperty()
+  id: number;
+
+  @Expose()
+  @ApiProperty()
+  codigo: string;
+
+  @Expose()
+  @ApiProperty()
+  nome: string;
+
+  @Expose()
+  @ApiProperty({ required: false })
+  descricao?: string;
+
+  @Expose()
+  @ApiProperty()
+  cargaHoraria: number;
+
+  @Expose()
+  @ApiProperty()
+  periodo: string;
+
+  @Expose()
+  @ApiProperty()
+  cursoId: number;
+
+  @Expose()
+  @ApiProperty()
+  createdAt: Date;
+
+  @Expose()
+  @ApiProperty()
+  updatedAt: Date;
+
+  @Expose()
+  @ApiProperty({ type: Object })
+  curso: {
+    id: number;
+    codigo: string;
+    nome: string;
+  };
+}
