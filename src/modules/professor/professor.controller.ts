@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { 
   ApiBearerAuth, 
   ApiOperation, 
@@ -10,6 +10,7 @@ import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 import { ProfessorService } from './professor.service';
 import { ProfessorResponseDto } from './dto/response-professor.dto';
+import { PaginationParams } from 'src/common/dto/pagination.dto';
 
 @ApiTags('Professores')
 @Controller('professores')
@@ -44,15 +45,15 @@ export class ProfessorController {
   @Get()
   @ApiOperation({ 
     summary: 'Listar todos professores',
-    description: 'Retorna todos professores cadastrados pelo administrador autenticado. Ordenado por data de criação.'
+    description: 'Retorna todos professores cadastrados pelo administrador autenticado com paginação e ordenação.'
   })
   @ApiResponse({ 
     status: 200, 
     description: 'Lista de professores encontrada',
     type: [ProfessorResponseDto]
   })
-  findAll(@Req() req) {
-    return this.professorService.findAll(req.user.sub);
+  findAll(@Req() req, @Query() paginationParams: PaginationParams) {
+    return this.professorService.findAll(req.user.sub, paginationParams);
   }
 
   @Get(':id')

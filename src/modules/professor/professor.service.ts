@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, ConflictException } from '@nestjs/common
 import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginationParams } from 'src/common/dto/pagination.dto';
 
 
 @Injectable()
@@ -20,10 +21,30 @@ export class ProfessorService {
     });
   }
 
-  async findAll(adminId: number) {
-    return this.prisma.professor.findMany({
-      where: { adminId }
-    });
+  async findAll(adminId: number, paginationParams: PaginationParams) {
+    const { page = 1, perPage = 15, sort = 'createdAt', sortDir = 'desc' } = paginationParams;
+  
+    const [total, data] = await this.prisma.$transaction([
+      this.prisma.professor.count({
+        where: { adminId },
+      }),
+      this.prisma.professor.findMany({
+        where: { adminId },
+        orderBy: sort ? { [sort]: sortDir } : undefined,
+        skip: (page - 1) * perPage,
+        take: perPage,
+      }),
+    ]);
+  
+    const totalPages = Math.ceil(total / perPage);
+  
+    return {
+      total,
+      totalPages,
+      currentPage: page,
+      perPage,
+      data,
+    };
   }
 
   async findOne(adminId: number, id: number) {
