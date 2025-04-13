@@ -2,6 +2,8 @@ import { Injectable, ConflictException, NotFoundException } from '@nestjs/common
 import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginationParams } from 'src/common/dto/pagination.dto';
+import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
 
 @Injectable()
 export class AlunoService {
@@ -19,10 +21,30 @@ export class AlunoService {
     });
   }
 
-  async findAll(adminId: number) {
-    return this.prisma.aluno.findMany({
-      where: { adminId }
-    });
+  async findAll(adminId: number, paginationParams: PaginationParams): Promise<PaginatedResponseDto<any>> {
+    const { page = 1, limit = 10, orderBy = 'createdAt', orderDirection = 'desc' } = paginationParams;
+  
+    const [total, data] = await this.prisma.$transaction([
+      this.prisma.aluno.count({
+        where: { adminId },
+      }),
+      this.prisma.aluno.findMany({
+        where: { adminId },
+        orderBy: { [orderBy]: orderDirection },
+        skip: (page - 1) * limit,
+        take: limit,
+      }),
+    ]);
+  
+    const totalPages = Math.ceil(total / limit);
+  
+    return {
+      total,
+      totalPages,
+      currentPage: page,
+      perPage: limit,
+      data,
+    };
   }
 
   async findOne(adminId: number, id: number) {

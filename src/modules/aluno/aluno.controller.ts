@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { 
   ApiBearerAuth, 
   ApiOperation, 
@@ -10,6 +10,8 @@ import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { AlunoResponseDto } from './dto/aluno-response.dto';
 import { AlunoService } from './aluno.service';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
+import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
+import { PaginationParams } from 'src/common/dto/pagination.dto';
 
 @ApiTags('Alunos')
 @Controller('alunos')
@@ -45,15 +47,18 @@ export class AlunoController {
   @Get()
   @ApiOperation({ 
     summary: 'Listar todos alunos',
-    description: 'Retorna todos alunos cadastrados pelo administrador autenticado. Ordenado por data de criação.'
+    description: 'Retorna todos alunos cadastrados pelo administrador autenticado, com paginação e ordenação.'
   })
   @ApiResponse({ 
     status: 200, 
-    description: 'Lista de alunos encontrada',
-    type: [AlunoResponseDto]
+    description: 'Lista de alunos paginada',
+    type: PaginatedResponseDto
   })
-  findAll(@Req() req) {
-    return this.alunoService.findAll(req.user.sub);
+  findAll(
+    @Req() req,
+    @Query() paginationParams: PaginationParams
+  ) {
+    return this.alunoService.findAll(req.user.sub, paginationParams);
   }
 
   @Get(':id')
