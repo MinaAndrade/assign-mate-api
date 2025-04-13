@@ -7,6 +7,7 @@ import { ProfessorModule } from './modules/professor/professor.module';
 import { AlunoModule } from './modules/aluno/aluno.module';
 import { CursoModule } from './modules/curso/curso.module';
 import { DisciplinaModule } from './modules/disciplina/disciplina.module';
+import { TurmaModule } from './modules/turma/turma.module';
 
 
 @Module({
@@ -18,7 +19,8 @@ import { DisciplinaModule } from './modules/disciplina/disciplina.module';
     ProfessorModule,
     AlunoModule,
     CursoModule,
-    DisciplinaModule
+    DisciplinaModule,
+    TurmaModule
   ],
   controllers: [],
   providers: [],

@@ -18,7 +18,7 @@ export class TurmaController {
   @ApiOperation({ summary: 'Criar nova turma', description: 'Vincula a um curso existente' })
   @ApiResponse({ status: 201, description: 'Turma criada', type: TurmaResponseDto })
   create(@Req() req, @Body() createTurmaDto: CreateTurmaDto) {
-    return this.turmaService.create(req.user.sub, createTurmaDto);
+    return this.turmaService.create(req.user.id, createTurmaDto);
   }
 
   @Get()
