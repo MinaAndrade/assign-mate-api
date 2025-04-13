@@ -1,29 +1,24 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsInt, IsString, IsIn, Min } from 'class-validator';
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class PaginationParams {
-  @ApiProperty({ required: false, default: 1 })
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @IsOptional()
-  page? = 1;
+  page: number = 1;
 
-  @ApiProperty({ required: false, default: 10 })
+  @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @Max(100)
-  @IsOptional()
-  limit? = 10;
+  perPage: number = 15;
 
-  @ApiProperty({ required: false })
+  @IsOptional()
   @IsString()
-  @IsOptional()
-  orderBy?: string;
+  sort?: string;
 
-  @ApiProperty({ required: false, enum: ['asc', 'desc'] })
   @IsOptional()
-  orderDirection?: 'asc' | 'desc';
+  @IsIn(['asc', 'desc'])
+  sortDir: 'asc' | 'desc' = 'asc';
 }

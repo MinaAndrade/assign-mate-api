@@ -22,7 +22,7 @@ export class AlunoService {
   }
 
   async findAll(adminId: number, paginationParams: PaginationParams): Promise<PaginatedResponseDto<any>> {
-    const { page = 1, limit = 10, orderBy = 'createdAt', orderDirection = 'desc' } = paginationParams;
+    const { page = 1, perPage = 15, sort = 'createdAt', sortDir = 'desc' } = paginationParams;
   
     const [total, data] = await this.prisma.$transaction([
       this.prisma.aluno.count({
@@ -30,19 +30,19 @@ export class AlunoService {
       }),
       this.prisma.aluno.findMany({
         where: { adminId },
-        orderBy: { [orderBy]: orderDirection },
-        skip: (page - 1) * limit,
-        take: limit,
+        orderBy: sort ? { [sort]: sortDir } : undefined,
+        skip: (page - 1) * perPage,
+        take: perPage,
       }),
     ]);
   
-    const totalPages = Math.ceil(total / limit);
+    const totalPages = Math.ceil(total / perPage);
   
     return {
       total,
       totalPages,
       currentPage: page,
-      perPage: limit,
+      perPage,
       data,
     };
   }
