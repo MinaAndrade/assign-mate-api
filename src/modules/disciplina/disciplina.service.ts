@@ -33,46 +33,46 @@ export class DisciplinaService {
     });
   }
 
-  async findAll(adminId: number, cursoId?: number) {
-    return this.prisma.disciplina.findMany({
-      where: { 
-        adminId,
-        cursoId: cursoId ? Number(cursoId) : undefined
-      },
-      include: { curso: true }
-    });
-  }
+  // async findAll(adminId: number, cursoId?: number) {
+  //   return this.prisma.disciplina.findMany({
+  //     where: { 
+  //       adminId,
+  //       cursoId: cursoId ? Number(cursoId) : undefined
+  //     },
+  //     include: { curso: true }
+  //   });
+  // }
 
-  async findAllPaginated(
-    adminId: number,
-    paginationParams: PaginationParams,
-    cursoId?: number
-  ) {
-    const { page, limit, orderBy, orderDirection } = paginationParams;
-    const where = { 
-      adminId,
-      cursoId: cursoId ? Number(cursoId) : undefined
-    };
+  // async findAllPaginated(
+  //   adminId: number,
+  //   paginationParams: PaginationParams,
+  //   cursoId?: number
+  // ) {
+  //   const { page, limit, orderBy, orderDirection } = paginationParams;
+  //   const where = { 
+  //     adminId,
+  //     cursoId: cursoId ? Number(cursoId) : undefined
+  //   };
   
-    const [total, data] = await Promise.all([
-      this.prisma.disciplina.count({ where }),
-      this.prisma.disciplina.findMany({
-        where,
-        skip: (page - 1) * limit,
-        take: limit,
-        orderBy: orderBy ? { [orderBy]: orderDirection || 'asc' } : undefined,
-        include: { curso: true }
-      })
-    ]);
+  //   const [total, data] = await Promise.all([
+  //     this.prisma.disciplina.count({ where }),
+  //     this.prisma.disciplina.findMany({
+  //       where,
+  //       skip: (page - 1) * limit,
+  //       take: limit,
+  //       orderBy: orderBy ? { [orderBy]: orderDirection || 'asc' } : undefined,
+  //       include: { curso: true }
+  //     })
+  //   ]);
   
-    return {
-      total,
-      totalPages: Math.ceil(total / limit),
-      currentPage: page,
-      perPage: limit,
-      data
-    };
-  }
+  //   return {
+  //     total,
+  //     totalPages: Math.ceil(total / limit),
+  //     currentPage: page,
+  //     perPage: limit,
+  //     data
+  //   };
+  // }
 
   async findOne(adminId: number, id: number) {
     const disciplina = await this.prisma.disciplina.findUnique({

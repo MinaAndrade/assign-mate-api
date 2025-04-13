@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
@@ -6,6 +6,7 @@ import { CursoService } from './curso.service';
 import { CursoResponseDto } from './dto/curso-response.dto';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { UpdateCursoDto } from './dto/update-curso.dto';
+import { PaginationParams } from 'src/common/dto/pagination.dto';
 
 @ApiTags('Cursos')
 @Controller('cursos')
@@ -24,10 +25,17 @@ export class CursoController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar todos cursos', description: 'Retorna todos cursos do administrador autenticado' })
-  @ApiResponse({ status: 200, description: 'Lista de cursos', type: [CursoResponseDto] })
-  findAll(@Req() req) {
-    return this.cursoService.findAll(req.user.sub);
+  @ApiOperation({
+    summary: 'Listar todos cursos', 
+    description: 'Retorna todos cursos do administrador autenticado' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Lista de cursos', 
+    type: [CursoResponseDto] 
+  })
+  findAll(@Req() req, @Query() paginationParams: PaginationParams) {
+    return this.cursoService.findAll(req.user.sub, paginationParams);
   }
 
   @Get(':id')

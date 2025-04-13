@@ -2,6 +2,8 @@ import { Injectable, ConflictException, NotFoundException } from '@nestjs/common
 import { UpdateCursoDto } from './dto/update-curso.dto';
 import { CreateCursoDto } from './dto/create-curso.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginationParams } from 'src/common/dto/pagination.dto';
+import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
 
 
 @Injectable()
@@ -19,10 +21,30 @@ export class CursoService {
     });
   }
 
-  async findAll(adminId: number) {
-    return this.prisma.curso.findMany({
-      where: { adminId }
-    });
+  async findAll(adminId: number, paginationParams: PaginationParams) {
+    const { page = 1, perPage = 15, sort = 'createdAt', sortDir = 'desc' } = paginationParams;
+  
+    const [total, data] = await this.prisma.$transaction([
+      this.prisma.curso.count({
+        where: { adminId },
+      }),
+      this.prisma.curso.findMany({
+        where: { adminId },
+        orderBy: sort ? { [sort]: sortDir } : undefined,
+        skip: (page - 1) * perPage,
+        take: perPage,
+      }),
+    ]);
+  
+    const totalPages = Math.ceil(total / perPage);
+  
+    return {
+      total,
+      totalPages,
+      currentPage: page,
+      perPage,
+      data,
+    };
   }
 
   async findOne(adminId: number, id: number) {
