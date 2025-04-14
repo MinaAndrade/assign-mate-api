@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
@@ -6,6 +6,7 @@ import { TurmaService } from './turma.service';
 import { CreateTurmaDto } from './dto/create-turma.dto';
 import { TurmaResponseDto } from './dto/turma-response.dto';
 import { UpdateTurmaDto } from './dto/update-turma.dto';
+import { PaginationParams } from 'src/common/dto/pagination.dto';
 
 @ApiTags('Turmas')
 @Controller('turmas')
@@ -22,10 +23,17 @@ export class TurmaController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Listar turmas', description: 'Lista todas turmas do administrador' })
-  @ApiResponse({ status: 200, description: 'Lista de turmas', type: [TurmaResponseDto] })
-  findAll(@Req() req) {
-    return this.turmaService.findAll(req.user.sub);
+  @ApiOperation({ 
+    summary: 'Listar turmas', 
+    description: 'Lista todas turmas do administrador' 
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Lista de turmas', 
+    type: [TurmaResponseDto] 
+  })
+  findAll(@Req() req,  @Query() paginationParams: PaginationParams) {
+    return this.turmaService.findAll(req.user.sub, paginationParams);
   }
 
   @Get(':id')

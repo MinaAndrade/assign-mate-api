@@ -3,6 +3,7 @@ import { CreateTurmaDto } from './dto/create-turma.dto';
 import { UpdateTurmaDto } from './dto/update-turma.dto';
 import { Turno, Modalidade } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { PaginationParams } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class TurmaService {
@@ -28,11 +29,30 @@ export class TurmaService {
     });
   }
 
-  async findAll(adminId: number) {
-    return this.prisma.turma.findMany({
-      where: { adminId },
-      include: { curso: true }
-    });
+  async findAll(adminId: number, paginationParams: PaginationParams) {
+    const { page = 1, perPage = 15, sort = 'createdAt', sortDir = 'desc' } = paginationParams;
+  
+    const [total, data] = await this.prisma.$transaction([
+      this.prisma.turma.count({
+        where: { adminId },
+      }),
+      this.prisma.turma.findMany({
+        where: { adminId },
+        orderBy: sort ? { [sort]: sortDir } : undefined,
+        skip: (page - 1) * perPage,
+        take: perPage,
+      }),
+    ]);
+  
+    const totalPages = Math.ceil(total / perPage);
+  
+    return {
+      total,
+      totalPages,
+      currentPage: page,
+      perPage,
+      data,
+    };
   }
 
   async findOne(adminId: number, id: number) {
