@@ -22,26 +22,19 @@ export class DisciplinaController {
     return this.disciplinaService.create(req.user.id, createDisciplinaDto);
   }
 
-  // @Get()
-  // @ApiQuery({ name: 'cursoId', required: false })
-  // @ApiQuery({ type: PaginationParams })
-  // @ApiOperation({ summary: 'Listar disciplinas (paginado)' })
-  // @ApiResponse({ 
-  //   status: 200, 
-  //   description: 'Lista de disciplinas',
-  //   type: PaginatedResponseDto<DisciplinaResponseDto>
-  // })
-  // findAll(
-  //   @Req() req,
-  //   @Query() paginationParams: PaginationParams,
-  //   @Query('cursoId') cursoId?: string
-  // ) {
-  //   return this.disciplinaService.findAllPaginated(
-  //     req.user.sub,
-  //     paginationParams,
-  //     cursoId ? Number(cursoId) : undefined
-  //   );
-  // }
+  @Get()
+
+  @ApiOperation({ summary: 'Listar todas as disciplinas',
+    description: 'Retorna todas as disciplinas do administrador autenticado'
+   })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Lista de disciplinas',
+    type: [DisciplinaResponseDto]
+  })
+  findAll(@Req() req, @Query() paginationParams: PaginationParams) {
+    return this.disciplinaService.findAll(req.user.sub, paginationParams);
+  }
 
   @Get(':id')
   @ApiOperation({ summary: 'Buscar disciplina por ID' })

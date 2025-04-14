@@ -33,46 +33,31 @@ export class DisciplinaService {
     });
   }
 
-  // async findAll(adminId: number, cursoId?: number) {
-  //   return this.prisma.disciplina.findMany({
-  //     where: { 
-  //       adminId,
-  //       cursoId: cursoId ? Number(cursoId) : undefined
-  //     },
-  //     include: { curso: true }
-  //   });
-  // }
-
-  // async findAllPaginated(
-  //   adminId: number,
-  //   paginationParams: PaginationParams,
-  //   cursoId?: number
-  // ) {
-  //   const { page, limit, orderBy, orderDirection } = paginationParams;
-  //   const where = { 
-  //     adminId,
-  //     cursoId: cursoId ? Number(cursoId) : undefined
-  //   };
+  async findAll(adminId: number, paginationParams: PaginationParams) {
+    const { page = 1, perPage = 15, sort = 'createdAt', sortDir = 'desc' } = paginationParams;
   
-  //   const [total, data] = await Promise.all([
-  //     this.prisma.disciplina.count({ where }),
-  //     this.prisma.disciplina.findMany({
-  //       where,
-  //       skip: (page - 1) * limit,
-  //       take: limit,
-  //       orderBy: orderBy ? { [orderBy]: orderDirection || 'asc' } : undefined,
-  //       include: { curso: true }
-  //     })
-  //   ]);
+    const [total, data] = await this.prisma.$transaction([
+      this.prisma.disciplina.count({
+        where: { adminId },
+      }),
+      this.prisma.disciplina.findMany({
+        where: { adminId },
+        orderBy: sort ? { [sort]: sortDir } : undefined,
+        skip: (page - 1) * perPage,
+        take: perPage,
+      }),
+    ]);
   
-  //   return {
-  //     total,
-  //     totalPages: Math.ceil(total / limit),
-  //     currentPage: page,
-  //     perPage: limit,
-  //     data
-  //   };
-  // }
+    const totalPages = Math.ceil(total / perPage);
+  
+    return {
+      total,
+      totalPages,
+      currentPage: page,
+      perPage,
+      data,
+    };
+  }
 
   async findOne(adminId: number, id: number) {
     const disciplina = await this.prisma.disciplina.findUnique({
