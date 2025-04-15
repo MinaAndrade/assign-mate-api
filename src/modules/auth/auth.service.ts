@@ -20,7 +20,10 @@ export class AuthService {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
-    const payload = { email: admin.email, sub: admin.id };
+    const payload = { 
+      email: admin.email, 
+      sub: admin.id 
+    };
     return {
       access_token: this.jwtService.sign(payload),
     };
