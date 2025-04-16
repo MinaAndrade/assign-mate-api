@@ -15,7 +15,7 @@ export class CreateProfessorDto {
 
   @ApiProperty({ example: '1990-01-01' })
   @IsDateString()
-  dataNascimento: Date;
+  dataNascimento: string;
 
   @ApiProperty({ example: 'Matemática' })
   @IsString()
