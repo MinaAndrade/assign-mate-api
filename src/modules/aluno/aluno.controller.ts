@@ -75,7 +75,7 @@ export class AlunoController {
     status: 404, 
     description: 'Aluno não encontrado'
   })
-  findOne(@Req() req, @Param('id', ParseIntPipe) id: number) {
+  findOne(@Req() req, @Param('id', ParseIntPipe) id: string) {
     return this.alunoService.findOne(req.user.sub, id);
   }
 
@@ -99,7 +99,7 @@ export class AlunoController {
   })
   update(
     @Req() req,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateAlunoDto: UpdateAlunoDto
   ) {
     return this.alunoService.update(req.user.sub, id, updateAlunoDto);
@@ -119,7 +119,7 @@ export class AlunoController {
     status: 404, 
     description: 'Aluno não encontrado'
   })
-  remove(@Req() req, @Param('id', ParseIntPipe) id: number) {
+  remove(@Req() req, @Param('id', ParseIntPipe) id: string) {
     return this.alunoService.remove(req.user.sub, id);
   }
 }

@@ -4,7 +4,7 @@ import { Expose } from 'class-transformer';
 export class AlunoResponseDto {
   @Expose()
   @ApiProperty()
-  id: number;
+  id: string;
 
   @Expose()
   @ApiProperty()

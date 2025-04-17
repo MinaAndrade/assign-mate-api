@@ -47,8 +47,8 @@ export class AlunoService {
     };
   }
 
-  async findOne(adminId: number, id: number) {
-    const aluno = await this.prisma.aluno.findUnique({
+  async findOne(adminId: number, id: string) {
+    const aluno = await this.prisma.aluno.findFirst({
       where: { id, adminId }
     });
 
@@ -58,7 +58,7 @@ export class AlunoService {
     return aluno;
   }
 
-  async update(adminId: number, id: number, updateAlunoDto: UpdateAlunoDto) {
+  async update(adminId: number, id: string, updateAlunoDto: UpdateAlunoDto) {
     await this.findOne(adminId, id);
     await this.checkUniqueConstraints(updateAlunoDto, id);
 
@@ -72,12 +72,12 @@ export class AlunoService {
     });
   }
 
-  async remove(adminId: number, id: number) {
+  async remove(adminId: number, id: string) {
     await this.findOne(adminId, id);
     return this.prisma.aluno.delete({ where: { id } });
   }
 
-  private async checkUniqueConstraints(dto: CreateAlunoDto | UpdateAlunoDto, id?: number) {
+  private async checkUniqueConstraints(dto: CreateAlunoDto | UpdateAlunoDto, id?: string) {
     if (dto.matricula) {
       const existingMatricula = await this.prisma.aluno.findFirst({
         where: { matricula: dto.matricula, NOT: { id } }

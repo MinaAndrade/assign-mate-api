@@ -38,7 +38,7 @@ model Professor {
 }
 
 model Aluno {
-  id            Int      @id @default(autoincrement())
+  id            String   @id @default(uuid())
   matricula     String   @unique
   nomeCompleto  String
   dataNascimento DateTime

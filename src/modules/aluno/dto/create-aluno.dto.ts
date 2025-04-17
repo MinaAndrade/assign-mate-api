@@ -15,7 +15,7 @@ export class CreateAlunoDto {
 
   @ApiProperty({ example: '2005-05-15' })
   @IsDateString()
-  dataNascimento: Date;
+  dataNascimento: string;
 
   @ApiProperty({ example: 'Engenharia de Software' })
   @IsString()
