@@ -6,4 +6,16 @@ export class TokenResponseDto {
     description: 'JWT access token',
   })
   access_token: string;
+
+  @ApiProperty({
+    example: 'exemplo@email.com',
+    description: 'E-mail do administrador autenticado',
+  })
+  email: string;
+
+  @ApiProperty({
+    example: 1,
+    description: 'ID do administrador (sub)',
+  })
+  id: number;
 }
