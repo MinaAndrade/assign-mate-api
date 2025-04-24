@@ -57,7 +57,7 @@ async function main() {
   const professores = await prisma.professor.createMany({
     data: [
       {
-        matricula: 'PROF001',
+        matricula: '25P0001',
         nomeCompleto: 'Ana Silva',
         dataNascimento: new Date('1980-05-15'),
         especialidade: 'Matemática',
@@ -65,7 +65,7 @@ async function main() {
         adminId: admin.id,
       },
       {
-        matricula: 'PROF002',
+        matricula: '25P0002',
         nomeCompleto: 'Carlos Oliveira',
         dataNascimento: new Date('1975-11-22'),
         especialidade: 'Física',
@@ -81,7 +81,7 @@ async function main() {
   const alunos = await prisma.aluno.createMany({
     data: [
       {
-        matricula: 'ALU001',
+        matricula: '25A0001',
         nomeCompleto: 'João Pereira',
         dataNascimento: new Date('2005-03-20'),
         curso: 'Matemática Básica',
@@ -89,7 +89,7 @@ async function main() {
         adminId: admin.id,
       },
       {
-        matricula: 'ALU002',
+        matricula: '25A0002',
         nomeCompleto: 'Maria Santos',
         dataNascimento: new Date('2006-07-12'),
         curso: 'Programação I',
