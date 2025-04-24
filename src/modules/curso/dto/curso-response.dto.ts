@@ -4,7 +4,7 @@ import { Expose } from 'class-transformer';
 export class CursoResponseDto {
   @Expose()
   @ApiProperty()
-  id: number;
+  id: string;
 
   @Expose()
   @ApiProperty()

@@ -39,7 +39,7 @@ export class TurmaController {
   @Get(':id')
   @ApiOperation({ summary: 'Detalhes da turma', description: 'Mostra detalhes de uma turma específica' })
   @ApiResponse({ status: 200, description: 'Detalhes da turma', type: TurmaResponseDto })
-  findOne(@Req() req, @Param('id', ParseIntPipe) id: number) {
+  findOne(@Req() req, @Param('id', ParseIntPipe) id: string) {
     return this.turmaService.findOne(req.user.sub, id);
   }
 
@@ -48,7 +48,7 @@ export class TurmaController {
   @ApiResponse({ status: 200, description: 'Turma atualizada', type: TurmaResponseDto })
   update(
     @Req() req,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateTurmaDto: UpdateTurmaDto
   ) {
     return this.turmaService.update(req.user.sub, id, updateTurmaDto);
@@ -57,7 +57,7 @@ export class TurmaController {
   @Delete(':id')
   @ApiOperation({ summary: 'Excluir turma', description: 'Remove permanentemente uma turma' })
   @ApiResponse({ status: 200, description: 'Turma excluída', type: TurmaResponseDto })
-  remove(@Req() req, @Param('id', ParseIntPipe) id: number) {
+  remove(@Req() req, @Param('id', ParseIntPipe) id: string) {
     return this.turmaService.remove(req.user.sub, id);
   }
 }

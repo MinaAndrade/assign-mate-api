@@ -29,5 +29,5 @@ export class CreateDisciplinaDto {
   @ApiProperty({ example: 1, description: 'ID do curso relacionado' })
   @IsInt()
   @IsNotEmpty()
-  cursoId: number;
+  cursoId: string;
 }

@@ -42,7 +42,7 @@ export class CursoController {
   @ApiOperation({ summary: 'Buscar curso por ID', description: 'Retorna detalhes de um curso específico' })
   @ApiResponse({ status: 200, description: 'Curso encontrado', type: CursoResponseDto })
   @ApiResponse({ status: 404, description: 'Curso não encontrado' })
-  findOne(@Req() req, @Param('id', ParseIntPipe) id: number) {
+  findOne(@Req() req, @Param('id', ParseIntPipe) id: string) {
     return this.cursoService.findOne(req.user.sub, id);
   }
 
@@ -53,7 +53,7 @@ export class CursoController {
   @ApiResponse({ status: 409, description: 'Novo código já está em uso' })
   update(
     @Req() req,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateCursoDto: UpdateCursoDto
   ) {
     return this.cursoService.update(req.user.sub, id, updateCursoDto);
@@ -63,7 +63,7 @@ export class CursoController {
   @ApiOperation({ summary: 'Excluir curso', description: 'Remove permanentemente um curso' })
   @ApiResponse({ status: 200, description: 'Curso excluído', type: CursoResponseDto })
   @ApiResponse({ status: 404, description: 'Curso não encontrado' })
-  remove(@Req() req, @Param('id', ParseIntPipe) id: number) {
+  remove(@Req() req, @Param('id', ParseIntPipe) id: string) {
     return this.cursoService.remove(req.user.sub, id);
   }
 }

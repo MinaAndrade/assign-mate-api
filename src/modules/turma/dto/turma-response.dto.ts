@@ -4,7 +4,7 @@ import { Expose } from 'class-transformer';
 export class TurmaResponseDto {
   @Expose()
   @ApiProperty()
-  id: number;
+  id: string;
 
   @Expose()
   @ApiProperty()
@@ -28,7 +28,7 @@ export class TurmaResponseDto {
 
   @Expose()
   @ApiProperty()
-  cursoId: number;
+  cursoId: string;
 
   @Expose()
   @ApiProperty()

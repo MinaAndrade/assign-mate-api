@@ -28,7 +28,7 @@ export class DisciplinaResponseDto {
 
   @Expose()
   @ApiProperty()
-  cursoId: number;
+  cursoId: string;
 
   @Expose()
   @ApiProperty()
@@ -41,7 +41,7 @@ export class DisciplinaResponseDto {
   @Expose()
   @ApiProperty({ type: Object })
   curso: {
-    id: number;
+    id: string;
     codigo: string;
     nome: string;
   };
