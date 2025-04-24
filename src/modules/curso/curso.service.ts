@@ -10,7 +10,7 @@ import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
 export class CursoService {
   constructor(private prisma: PrismaService) {}
 
-  async create(adminId: number, createCursoDto: CreateCursoDto) {
+  async create(adminId: string, createCursoDto: CreateCursoDto) {
     await this.checkUniqueCodigo(createCursoDto.codigo);
     
     return this.prisma.curso.create({
@@ -21,7 +21,7 @@ export class CursoService {
     });
   }
 
-  async findAll(adminId: number, paginationParams: PaginationParams) {
+  async findAll(adminId: string, paginationParams: PaginationParams) {
     const { page = 1, perPage = 15, sort = 'createdAt', sortDir = 'desc' } = paginationParams;
   
     const [total, data] = await this.prisma.$transaction([
@@ -47,7 +47,7 @@ export class CursoService {
     };
   }
 
-  async findOne(adminId: number, id: number) {
+  async findOne(adminId: string, id: string) {
     const curso = await this.prisma.curso.findUnique({
       where: { id, adminId }
     });
@@ -58,7 +58,7 @@ export class CursoService {
     return curso;
   }
 
-  async update(adminId: number, id: number, updateCursoDto: UpdateCursoDto) {
+  async update(adminId: string, id: string, updateCursoDto: UpdateCursoDto) {
     await this.findOne(adminId, id);
     
     if (updateCursoDto.codigo) {
@@ -71,12 +71,12 @@ export class CursoService {
     });
   }
 
-  async remove(adminId: number, id: number) {
+  async remove(adminId: string, id: string) {
     await this.findOne(adminId, id);
     return this.prisma.curso.delete({ where: { id } });
   }
 
-  private async checkUniqueCodigo(codigo: string, excludeId?: number) {
+  private async checkUniqueCodigo(codigo: string, excludeId?: string) {
     const existingCurso = await this.prisma.curso.findFirst({
       where: { 
         codigo,

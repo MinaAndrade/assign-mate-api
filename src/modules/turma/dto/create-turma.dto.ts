@@ -29,5 +29,5 @@ export class CreateTurmaDto {
   @ApiProperty({ example: 1 })
   @IsNumber()
   @IsNotEmpty()
-  cursoId: number;
+  cursoId: string;
 }

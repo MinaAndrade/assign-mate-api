@@ -5,7 +5,7 @@ import { IsUUID } from 'class-validator';
 export class ProfessorResponseDto {
   @Expose()
   @ApiProperty()
-  id: number;
+  id: string;
 
   @Expose()
   @ApiProperty()

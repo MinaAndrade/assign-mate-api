@@ -9,7 +9,7 @@ import { PaginationParams } from 'src/common/dto/pagination.dto';
 export class DisciplinaService {
   constructor(private prisma: PrismaService) {}
 
-  async create(adminId: number, createDisciplinaDto: CreateDisciplinaDto) {
+  async create(adminId: string, createDisciplinaDto: CreateDisciplinaDto) {
     await this.validateRelations(createDisciplinaDto, adminId);
     
     return this.prisma.disciplina.create({
@@ -33,7 +33,7 @@ export class DisciplinaService {
     });
   }
 
-  async findAll(adminId: number, paginationParams: PaginationParams) {
+  async findAll(adminId: string, paginationParams: PaginationParams) {
     const { page = 1, perPage = 15, sort = 'createdAt', sortDir = 'desc' } = paginationParams;
   
     const [total, data] = await this.prisma.$transaction([
@@ -59,7 +59,7 @@ export class DisciplinaService {
     };
   }
 
-  async findOne(adminId: number, id: number) {
+  async findOne(adminId: string, id: string) {
     const disciplina = await this.prisma.disciplina.findUnique({
       where: { id, adminId },
       include: { curso: true }
@@ -71,7 +71,7 @@ export class DisciplinaService {
     return disciplina;
   }
 
-  async update(adminId: number, id: number, updateDisciplinaDto: UpdateDisciplinaDto) {
+  async update(adminId: string, id: string, updateDisciplinaDto: UpdateDisciplinaDto) {
     await this.findOne(adminId, id);
     await this.validateRelations(updateDisciplinaDto, adminId, id);
 
@@ -81,12 +81,12 @@ export class DisciplinaService {
     });
   }
 
-  async remove(adminId: number, id: number) {
+  async remove(adminId: string, id: string) {
     await this.findOne(adminId, id);
     return this.prisma.disciplina.delete({ where: { id } });
   }
 
-  private async validateRelations(dto: CreateDisciplinaDto | UpdateDisciplinaDto, adminId: number, disciplinaId?: number) {
+  private async validateRelations(dto: CreateDisciplinaDto | UpdateDisciplinaDto, adminId: string, disciplinaId?: string) {
     // Verifica código único
     if (dto.codigo) {
       const existing = await this.prisma.disciplina.findFirst({

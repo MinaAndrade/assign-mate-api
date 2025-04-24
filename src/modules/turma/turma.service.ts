@@ -9,7 +9,7 @@ import { PaginationParams } from 'src/common/dto/pagination.dto';
 export class TurmaService {
   constructor(private prisma: PrismaService) {}
 
-  async create(adminId: number, createTurmaDto: CreateTurmaDto) {
+  async create(adminId: string, createTurmaDto: CreateTurmaDto) {
     await this.validateRelations(createTurmaDto, adminId);
     
     return this.prisma.turma.create({
@@ -29,7 +29,7 @@ export class TurmaService {
     });
   }
 
-  async findAll(adminId: number, paginationParams: PaginationParams) {
+  async findAll(adminId: string, paginationParams: PaginationParams) {
     const { page = 1, perPage = 15, sort = 'createdAt', sortDir = 'desc' } = paginationParams;
   
     const [total, data] = await this.prisma.$transaction([
@@ -55,7 +55,7 @@ export class TurmaService {
     };
   }
 
-  async findOne(adminId: number, id: number) {
+  async findOne(adminId: string, id: string) {
     const turma = await this.prisma.turma.findUnique({
       where: { id, adminId },
       include: { curso: true }
@@ -67,7 +67,7 @@ export class TurmaService {
     return turma;
   }
 
-  async update(adminId: number, id: number, updateTurmaDto: UpdateTurmaDto) {
+  async update(adminId: string, id: string, updateTurmaDto: UpdateTurmaDto) {
     await this.findOne(adminId, id);
     await this.validateRelations(updateTurmaDto, adminId, id);
 
@@ -88,15 +88,15 @@ export class TurmaService {
     });
   }
 
-  async remove(adminId: number, id: number) {
+  async remove(adminId: string, id: string) {
     await this.findOne(adminId, id);
     return this.prisma.turma.delete({ where: { id } });
   }
 
   private async validateRelations(
     dto: CreateTurmaDto | UpdateTurmaDto, 
-    adminId: number, 
-    turmaId?: number
+    adminId: string, 
+    turmaId?: string
   ) {
     // Verifica código único
     if (dto.codigo) {

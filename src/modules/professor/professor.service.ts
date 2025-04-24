@@ -9,7 +9,7 @@ import { PaginationParams } from 'src/common/dto/pagination.dto';
 export class ProfessorService {
   constructor(private prisma: PrismaService) {}
 
-  async create(adminId: number, createProfessorDto: CreateProfessorDto) {
+  async create(adminId: string, createProfessorDto: CreateProfessorDto) {
     await this.checkUniqueConstraints(createProfessorDto);
     
     return this.prisma.professor.create({
@@ -21,7 +21,7 @@ export class ProfessorService {
     });
   }
 
-  async findAll(adminId: number, paginationParams: PaginationParams) {
+  async findAll(adminId: string, paginationParams: PaginationParams) {
     const { page = 1, perPage = 15, sort = 'createdAt', sortDir = 'desc' } = paginationParams;
   
     const [total, data] = await this.prisma.$transaction([
@@ -47,7 +47,7 @@ export class ProfessorService {
     };
   }
 
-  async findOne(adminId: number, id: number) {
+  async findOne(adminId: string, id: string) {
     const professor = await this.prisma.professor.findUnique({
       where: { id, adminId }
     });
@@ -58,7 +58,7 @@ export class ProfessorService {
     return professor;
   }
 
-  async update(adminId: number, id: number, updateProfessorDto: UpdateProfessorDto) {
+  async update(adminId: string, id: string, updateProfessorDto: UpdateProfessorDto) {
     await this.findOne(adminId, id); // Verifica se existe
     await this.checkUniqueConstraints(updateProfessorDto, id);
 
@@ -72,12 +72,12 @@ export class ProfessorService {
     });
   }
 
-  async remove(adminId: number, id: number) {
+  async remove(adminId: string, id: string) {
     await this.findOne(adminId, id);
     return this.prisma.professor.delete({ where: { id } });
   }
 
-  private async checkUniqueConstraints(dto: CreateProfessorDto | UpdateProfessorDto, id?: number) {
+  private async checkUniqueConstraints(dto: CreateProfessorDto | UpdateProfessorDto, id?: string) {
     if (dto.matricula) {
       const existingMatricula = await this.prisma.professor.findFirst({
         where: { matricula: dto.matricula, NOT: { id } }

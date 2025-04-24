@@ -70,7 +70,7 @@ export class ProfessorController {
     status: 404, 
     description: 'Professor não encontrado'
   })
-  findOne(@Req() req, @Param('id', ParseIntPipe) id: number) {
+  findOne(@Req() req, @Param('id', ParseIntPipe) id: string) {
     return this.professorService.findOne(req.user.sub, id);
   }
 
@@ -94,7 +94,7 @@ export class ProfessorController {
   })
   update(
     @Req() req,
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id', ParseIntPipe) id: string,
     @Body() updateProfessorDto: UpdateProfessorDto
   ) {
     return this.professorService.update(req.user.sub, id, updateProfessorDto);
@@ -114,7 +114,7 @@ export class ProfessorController {
     status: 404, 
     description: 'Professor não encontrado'
   })
-  remove(@Req() req, @Param('id', ParseIntPipe) id: number) {
+  remove(@Req() req, @Param('id', ParseIntPipe) id: string) {
     return this.professorService.remove(req.user.sub, id);
   }
 }

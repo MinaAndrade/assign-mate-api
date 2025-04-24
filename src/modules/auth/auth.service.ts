@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
+import { IS_EMAIL } from 'class-validator';
 
 @Injectable()
 export class AuthService {
@@ -26,6 +27,8 @@ export class AuthService {
     };
     return {
       access_token: this.jwtService.sign(payload),
+      email: admin.email,
+      id: admin.id,
     };
   }
 }

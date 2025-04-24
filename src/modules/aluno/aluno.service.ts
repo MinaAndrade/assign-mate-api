@@ -9,7 +9,7 @@ import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
 export class AlunoService {
   constructor(private prisma: PrismaService) {}
 
-  async create(adminId: number, createAlunoDto: CreateAlunoDto) {
+  async create(adminId: string, createAlunoDto: CreateAlunoDto) {
     await this.checkUniqueConstraints(createAlunoDto);
     
     return this.prisma.aluno.create({
@@ -21,7 +21,7 @@ export class AlunoService {
     });
   }
 
-  async findAll(adminId: number, paginationParams: PaginationParams): Promise<PaginatedResponseDto<any>> {
+  async findAll(adminId: string, paginationParams: PaginationParams): Promise<PaginatedResponseDto<any>> {
     const { page = 1, perPage = 15, sort = 'createdAt', sortDir = 'desc' } = paginationParams;
   
     const [total, data] = await this.prisma.$transaction([
@@ -47,7 +47,7 @@ export class AlunoService {
     };
   }
 
-  async findOne(adminId: number, id: string) {
+  async findOne(adminId: string, id: string) {
     const aluno = await this.prisma.aluno.findFirst({
       where: { id, adminId }
     });
@@ -58,7 +58,7 @@ export class AlunoService {
     return aluno;
   }
 
-  async update(adminId: number, id: string, updateAlunoDto: UpdateAlunoDto) {
+  async update(adminId: string, id: string, updateAlunoDto: UpdateAlunoDto) {
     await this.findOne(adminId, id);
     await this.checkUniqueConstraints(updateAlunoDto, id);
 
@@ -72,7 +72,7 @@ export class AlunoService {
     });
   }
 
-  async remove(adminId: number, id: string) {
+  async remove(adminId: string, id: string) {
     await this.findOne(adminId, id);
     return this.prisma.aluno.delete({ where: { id } });
   }
