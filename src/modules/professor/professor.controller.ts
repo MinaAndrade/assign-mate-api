@@ -94,7 +94,7 @@ export class ProfessorController {
   })
   update(
     @Req() req,
-    @Param('id', ParseIntPipe) id: string,
+    @Param('id') id: string,
     @Body() updateProfessorDto: UpdateProfessorDto
   ) {
     return this.professorService.update(req.user.sub, id, updateProfessorDto);

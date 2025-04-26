@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsEmail, IsOptional, IsString, Matches } from 'class-validator';
+import { IsDateString, IsEmail, IsOptional, IsString, Matches, MinLength } from 'class-validator';
 import { PartialType } from '@nestjs/swagger';
 import { CreateProfessorDto } from './create-professor.dto';
 
@@ -15,4 +15,9 @@ export class UpdateProfessorDto extends PartialType(CreateProfessorDto) {
   @IsOptional()
   @IsEmail()
   email?: string;
+
+  @ApiProperty({ required: false, minLength: 6 })
+  @IsOptional()
+  @MinLength(6)
+  password?: string;
 }

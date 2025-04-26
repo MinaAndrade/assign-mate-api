@@ -3,7 +3,7 @@ import { CreateProfessorDto } from './dto/create-professor.dto';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { PaginationParams } from 'src/common/dto/pagination.dto';
-
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class ProfessorService {
@@ -11,10 +11,13 @@ export class ProfessorService {
 
   async create(adminId: string, createProfessorDto: CreateProfessorDto) {
     await this.checkUniqueConstraints(createProfessorDto);
+
+    const hashedPassword = await bcrypt.hash(createProfessorDto.password, 10);
     
     return this.prisma.professor.create({
       data: {
         ...createProfessorDto,
+        password: hashedPassword,
         dataNascimento: new Date(createProfessorDto.dataNascimento),
         adminId: adminId
       }
@@ -61,6 +64,16 @@ export class ProfessorService {
   async update(adminId: string, id: string, updateProfessorDto: UpdateProfessorDto) {
     await this.findOne(adminId, id); // Verifica se existe
     await this.checkUniqueConstraints(updateProfessorDto, id);
+
+    const data: any = { ...updateProfessorDto };
+
+    if (updateProfessorDto.password) {
+      data.password = await bcrypt.hash(updateProfessorDto.password, 10);
+    }
+
+    if (updateProfessorDto.dataNascimento) {
+      data.dataNascimento = new Date(updateProfessorDto.dataNascimento);
+    }
 
     return this.prisma.professor.update({
       where: { id },

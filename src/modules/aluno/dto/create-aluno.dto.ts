@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsEmail, IsString, Matches } from 'class-validator';
+import { IsDateString, IsEmail, IsString, Matches, MinLength } from 'class-validator';
 
 export class CreateAlunoDto {
   @ApiProperty({ example: 'ALUNO12345' })
@@ -24,4 +24,9 @@ export class CreateAlunoDto {
   @ApiProperty({ example: 'maria.oliveira@escola.com' })
   @IsEmail()
   email: string;
+
+  @ApiProperty({ example: 'senhaSegura123', minLength: 6 })
+  @IsString()
+  @MinLength(6)
+  password: string;
 }

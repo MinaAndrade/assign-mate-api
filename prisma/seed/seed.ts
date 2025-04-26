@@ -62,6 +62,7 @@ async function main() {
         dataNascimento: new Date('1980-05-15'),
         especialidade: 'Matemática',
         email: 'ana.silva@escola.com',
+        password: await bcrypt.hash('defaultPassword1', 10),
         adminId: admin.id,
       },
       {
@@ -70,6 +71,7 @@ async function main() {
         dataNascimento: new Date('1975-11-22'),
         especialidade: 'Física',
         email: 'carlos.oliveira@escola.com',
+        password: await bcrypt.hash('defaultPassword2', 10),
         adminId: admin.id,
       },
     ],
@@ -86,6 +88,7 @@ async function main() {
         dataNascimento: new Date('2005-03-20'),
         curso: 'Matemática Básica',
         email: 'joao.pereira@escola.com',
+        password: await bcrypt.hash('defaultPassword1', 10),
         adminId: admin.id,
       },
       {
@@ -94,6 +97,7 @@ async function main() {
         dataNascimento: new Date('2006-07-12'),
         curso: 'Programação I',
         email: 'maria.santos@escola.com',
+        password: await bcrypt.hash('defaultPassword2', 10),
         adminId: admin.id,
       },
     ],
