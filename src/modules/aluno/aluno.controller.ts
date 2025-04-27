@@ -99,7 +99,7 @@ export class AlunoController {
   })
   update(
     @Req() req,
-    @Param('id', ParseIntPipe) id: string,
+    @Param('id') id: string,
     @Body() updateAlunoDto: UpdateAlunoDto
   ) {
     return this.alunoService.update(req.user.sub, id, updateAlunoDto);

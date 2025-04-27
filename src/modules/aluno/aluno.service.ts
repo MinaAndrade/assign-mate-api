@@ -4,6 +4,7 @@ import { UpdateAlunoDto } from './dto/update-aluno.dto';
 import { PrismaService } from 'src/modules/prisma/prisma.service';
 import { PaginationParams } from 'src/common/dto/pagination.dto';
 import { PaginatedResponseDto } from 'src/common/dto/paginated-response.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AlunoService {
@@ -12,9 +13,12 @@ export class AlunoService {
   async create(adminId: string, createAlunoDto: CreateAlunoDto) {
     await this.checkUniqueConstraints(createAlunoDto);
     
+    const hashedPassword = await bcrypt.hash(createAlunoDto.password, 10);
+
     return this.prisma.aluno.create({
       data: {
         ...createAlunoDto,
+        password: hashedPassword,
         dataNascimento: new Date(createAlunoDto.dataNascimento),
         adminId: adminId
       }
@@ -62,13 +66,19 @@ export class AlunoService {
     await this.findOne(adminId, id);
     await this.checkUniqueConstraints(updateAlunoDto, id);
 
+    const data: any = { ...updateAlunoDto };
+
+    if (updateAlunoDto.password) {
+      data.password = await bcrypt.hash(updateAlunoDto.password, 10);
+    }
+
+    if (updateAlunoDto.dataNascimento) {
+      data.dataNascimento = new Date(updateAlunoDto.dataNascimento);
+    }
+
     return this.prisma.aluno.update({
       where: { id },
-      data: {
-        ...updateAlunoDto,
-        dataNascimento: updateAlunoDto.dataNascimento ? 
-          new Date(updateAlunoDto.dataNascimento) : undefined
-      }
+      data
     });
   }
 
