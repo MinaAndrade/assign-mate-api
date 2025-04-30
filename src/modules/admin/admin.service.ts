@@ -21,6 +21,7 @@ export class AdminService {
     const admin = await this.prisma.admin.create({
       data: {
         email: createAdminDto.email,
+        name: createAdminDto.name,
         password: hashedPassword,
       },
     });
@@ -28,6 +29,7 @@ export class AdminService {
     return {
       id: admin.id,
       email: admin.email,
+      name: admin.name,
       createdAt: admin.createdAt,
     };
   }

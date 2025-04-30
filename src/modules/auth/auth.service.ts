@@ -27,8 +27,9 @@ export class AuthService {
     };
     return {
       access_token: this.jwtService.sign(payload),
-      email: admin.email,
       id: admin.id,
+      name: admin.name,
+      email: admin.email,
     };
   }
 }

@@ -12,5 +12,9 @@ export class AdminResponseDto {
 
   @Expose()
   @ApiProperty()
+  name: string;
+
+  @Expose()
+  @ApiProperty()
   createdAt: Date;
 }
