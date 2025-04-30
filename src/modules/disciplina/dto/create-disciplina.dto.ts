@@ -27,7 +27,7 @@ export class CreateDisciplinaDto {
   periodo: string;
 
   @ApiProperty({ example: 1, description: 'ID do curso relacionado' })
-  @IsInt()
+  @IsString()
   @IsNotEmpty()
   cursoId: string;
 }

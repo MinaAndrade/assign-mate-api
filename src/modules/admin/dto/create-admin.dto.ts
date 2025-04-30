@@ -11,4 +11,9 @@ export class CreateAdminDto {
   @IsNotEmpty()
   @MinLength(6)
   password: string;
+
+  @ApiProperty({ example: 'Administrado Lindao' })
+  @IsString()
+  @IsNotEmpty()
+  name: string;
 }
