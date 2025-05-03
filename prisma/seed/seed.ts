@@ -31,20 +31,20 @@ async function main() {
   const cursos = await prisma.curso.createMany({
     data: [
       {
-        codigo: 'MAT101',
-        nome: 'Matemática Básica',
+        codigo: 'MAT',
+        nome: 'Matemática',
         descricao: 'Introdução à matemática elementar',
         adminId: admin.id,
       },
       {
-        codigo: 'FIS201',
-        nome: 'Física Geral',
+        codigo: 'FIS',
+        nome: 'Física',
         descricao: 'Conceitos básicos de física',
         adminId: admin.id,
       },
       {
-        codigo: 'PROG301',
-        nome: 'Programação I',
+        codigo: 'GEO',
+        nome: 'Geografia',
         descricao: 'Introdução à programação',
         adminId: admin.id,
       },
@@ -57,7 +57,7 @@ async function main() {
   const professores = await prisma.professor.createMany({
     data: [
       {
-        matricula: '25P0001',
+        matricula: '25P00001',
         nomeCompleto: 'Ana Silva',
         dataNascimento: new Date('1980-05-15'),
         especialidade: 'Matemática',
@@ -66,7 +66,7 @@ async function main() {
         adminId: admin.id,
       },
       {
-        matricula: '25P0002',
+        matricula: '25P00002',
         nomeCompleto: 'Carlos Oliveira',
         dataNascimento: new Date('1975-11-22'),
         especialidade: 'Física',
@@ -83,7 +83,7 @@ async function main() {
   const alunos = await prisma.aluno.createMany({
     data: [
       {
-        matricula: '25A0001',
+        matricula: '25A00001',
         nomeCompleto: 'João Pereira',
         dataNascimento: new Date('2005-03-20'),
         curso: 'Matemática Básica',
@@ -92,7 +92,7 @@ async function main() {
         adminId: admin.id,
       },
       {
-        matricula: '25A0002',
+        matricula: '25A00002',
         nomeCompleto: 'Maria Santos',
         dataNascimento: new Date('2006-07-12'),
         curso: 'Programação I',

@@ -94,14 +94,13 @@ enum Turno {
 enum Modalidade {
   PRESENCIAL
   EAD
-  SEMI_PRESENCIAL
+  HIBRIDO
 }
 
 model Turma {
   id            String     @id @default(uuid())
   codigo        String     @unique
   semestre      String
-  nome          String
   turno         Turno
   modalidade    Modalidade
   createdAt     DateTime   @default(now())

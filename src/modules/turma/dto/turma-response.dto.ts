@@ -15,10 +15,6 @@ export class TurmaResponseDto {
   semestre: string;
 
   @Expose()
-  @ApiProperty()
-  nome: string;
-
-  @Expose()
   @ApiProperty({ enum: ['MANHA', 'TARDE', 'NOITE'] })
   turno: string;
 
